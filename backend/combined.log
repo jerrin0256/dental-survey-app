@@ -1,0 +1,24 @@
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T10:15:38.452Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T10:15:38.479Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T10:15:39.024Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T10:22:25.769Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T10:22:25.789Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T10:22:26.263Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T10:53:21.435Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T10:53:21.458Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T10:53:21.978Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T11:08:26.891Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T11:08:26.908Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T11:08:27.397Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T11:51:13.599Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T11:51:13.617Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T11:51:14.069Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T11:55:12.162Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T11:55:12.181Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T11:55:12.668Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-01T13:02:25.677Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-01T13:02:25.706Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-01T13:02:26.282Z"}
+{"level":"info","message":"Attempting to connect to MongoDB Atlas...","service":"dental-survey-api","timestamp":"2026-04-07T04:36:47.840Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-07T04:36:47.873Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-07T04:36:48.479Z"}
