@@ -26,7 +26,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://192.168.29.38:5001/api';
+// const API_BASE_URL = 'http://192.168.29.38:5001/api';
+const API_BASE_URL = 'https://dental-survey-app.onrender.com';
+
 const API_TIMEOUT = 15000;
 
 console.log("🔗 Backend API URL:", API_BASE_URL);

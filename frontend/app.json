@@ -18,6 +18,12 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b84d57d5-f9ca-4d03-9a6e-ba2647e59e33"
+      }
+    },
+    "owner": "jerryn"
   }
 }
