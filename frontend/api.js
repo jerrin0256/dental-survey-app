@@ -25,11 +25,22 @@
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
-// const API_BASE_URL = 'http://192.168.29.38:5001/api';
-const API_BASE_URL = 'https://dental-survey-app.onrender.com';
+// Get API URL from environment or fallback to local
+const expoConfig = Constants.manifest || Constants.expoConfig || {};
+const debuggerHost =
+  typeof expoConfig.debuggerHost === 'string' ? expoConfig.debuggerHost :
+  typeof expoConfig.hostUri === 'string' ? expoConfig.hostUri :
+  typeof expoConfig.packagerOpts?.url === 'string' ? expoConfig.packagerOpts.url :
+  null;
+const localDebugHost = typeof debuggerHost === 'string' ? debuggerHost.split(':').shift() : null;
+const emulatorHost = Platform.OS === 'android' ? '10.0.2.2' : 'localhost';
+const LOCAL_API_FALLBACK = `http://${localDebugHost || emulatorHost}:5001/api`;
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || LOCAL_API_FALLBACK;
 
-const API_TIMEOUT = 15000;
+const API_TIMEOUT = 30000; // Increased to 30 seconds for slow connections
 
 console.log("🔗 Backend API URL:", API_BASE_URL);
 
@@ -58,7 +69,7 @@ API.interceptors.request.use(
   }
 );
 
-// Response interceptor
+// Response interceptor with better error handling
 API.interceptors.response.use(
   (response) => {
     console.log(`✅ ${response.config.method.toUpperCase()} ${response.config.url} - ${response.status}`);
@@ -68,7 +79,8 @@ API.interceptors.response.use(
     if (error.response) {
       console.error(`❌ API Error [${error.response.status}]:`, error.response.data);
     } else if (error.request) {
-      console.error('❌ Network Error - No response received:', error.message);
+      console.error('❌ Network Error - No response received. Check if backend is running.');
+      console.error('Backend URL:', API_BASE_URL);
     } else {
       console.error('❌ Error:', error.message);
     }

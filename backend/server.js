@@ -36,10 +36,12 @@ const app = express();
 app.use(helmet());
 app.use(compression());
 
-// CORS with specific origin
+// CORS - Allow all origins for development
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'your-frontend-domain.com' : '*',
-  credentials: true
+  origin: '*',
+  credentials: false,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json({ limit: '10mb' }));
@@ -49,7 +51,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', authRoutes);
 app.use('/api', surveyRoutes);
 
-app.get('/', (req, res) => res.json({ message: 'Dental Survey API running' }));
+// Root fallback support for clients that do not include /api in the path
+app.use('/', authRoutes);
+app.use('/', surveyRoutes);
+
+app.get('/', (req, res) => res.json({ 
+  message: 'Dental Survey API running',
+  status: 'OK',
+  timestamp: new Date().toISOString(),
+  mongoConnected: mongoose.connection.readyState === 1
+}));
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -63,24 +74,32 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dental-survey-app';
 
 // Start server first so it stays alive
 const server = app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
+  logger.info(`MongoDB URI source: ${process.env.MONGO_URI ? 'MONGO_URI environment variable' : 'local fallback'}`);
+}).on('error', (err) => {
+  logger.error('Server failed to start', err);
+  if (err.code === 'EADDRINUSE') {
+    logger.error(`Port ${PORT} is already in use. Change PORT or stop the process using it.`);
+  }
+  process.exit(1);
 });
 
 // Attempt connection but catch it globally to prevent crash
 const connectWithRetry = () => {
-  logger.info('Attempting to connect to MongoDB Atlas...');
+  logger.info(`Attempting to connect to MongoDB using ${mongoUri}`);
   mongoose
-    .connect(process.env.MONGO_URI, {
+    .connect(mongoUri, {
       serverSelectionTimeoutMS: 5000, // Timeout after 5s
     })
     .then(() => {
       logger.info('MongoDB connected successfully');
     })
     .catch((err) => {
-      logger.error('CRITICAL: MongoDB Atlas connection failed.', err);
+      logger.error('CRITICAL: MongoDB connection failed.', err);
       logger.info('Retrying in 10 seconds...');
       setTimeout(connectWithRetry, 10000);
     });

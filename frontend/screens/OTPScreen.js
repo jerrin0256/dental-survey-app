@@ -78,13 +78,32 @@ export default function OTPScreen({ navigation, route }) {
   const inputRefs = useRef([]);
 
   const handleOtpChange = (value, index) => {
+    // Only allow numbers
+    if (value && !/^[0-9]$/.test(value)) return;
+    
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // auto advance
+    // Auto advance to next input
     if (value && index < 3) {
-      inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1]?.focus();
+    }
+    
+    // Auto verify when all 4 digits entered
+    if (index === 3 && value) {
+      const fullOtp = [...newOtp.slice(0, 3), value].join('');
+      if (fullOtp.length === 4) {
+        // Small delay to show the last digit
+        setTimeout(() => handleVerify(), 300);
+      }
+    }
+  };
+
+  const handleKeyPress = (e, index) => {
+    // Handle backspace
+    if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
@@ -151,6 +170,8 @@ export default function OTPScreen({ navigation, route }) {
                 keyboardType="number-pad"
                 maxLength={1}
                 onChangeText={(val) => handleOtpChange(val, i)}
+                onKeyPress={(e) => handleKeyPress(e, i)}
+                autoFocus={i === 0}
               />
             ))}
           </View>
