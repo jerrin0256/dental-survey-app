@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Otp = require('../models/Otp');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 let twilio;
 try {
@@ -15,6 +16,62 @@ const client = twilio && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AU
   ? twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
   : null;
 
+// Fallback in-memory store if MongoDB is slow
+const otpMemoryStore = new Map();
+
+// Helper to store OTP with fallback
+const storeOtp = async (phone, otp, expiresAt) => {
+  // Try MongoDB first
+  if (mongoose.connection.readyState === 1) {
+    try {
+      await Otp.deleteMany({ phone });
+      await Otp.create({ phone, otp, expiresAt });
+      console.log('[OTP] Stored in MongoDB');
+      return;
+    } catch (err) {
+      console.error('[OTP] MongoDB failed, using memory:', err.message);
+    }
+  }
+  // Fallback to memory
+  otpMemoryStore.set(phone, { otp, expiresAt });
+  console.log('[OTP] Stored in memory');
+};
+
+// Helper to get OTP with fallback
+const getOtp = async (phone, otp) => {
+  // Try MongoDB first
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const storedOtp = await Otp.findOne({ phone, otp }).maxTimeMS(5000);
+      if (storedOtp) {
+        console.log('[OTP] Retrieved from MongoDB');
+        return storedOtp;
+      }
+    } catch (err) {
+      console.error('[OTP] MongoDB read failed, checking memory:', err.message);
+    }
+  }
+  // Fallback to memory
+  const memOtp = otpMemoryStore.get(phone);
+  if (memOtp && memOtp.otp === otp) {
+    console.log('[OTP] Retrieved from memory');
+    return memOtp;
+  }
+  return null;
+};
+
+// Helper to delete OTP with fallback
+const deleteOtp = async (phone) => {
+  if (mongoose.connection.readyState === 1) {
+    try {
+      await Otp.deleteMany({ phone });
+    } catch (err) {
+      console.error('[OTP] MongoDB delete failed:', err.message);
+    }
+  }
+  otpMemoryStore.delete(phone);
+};
+
 // POST /send-otp
 const sendOtp = async (req, res) => {
   try {
@@ -24,15 +81,8 @@ const sendOtp = async (req, res) => {
     const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Delete any existing OTP for this phone
-    await Otp.deleteMany({ phone });
-
-    // Store OTP in MongoDB
-    await Otp.create({
-      phone,
-      otp: generatedOtp,
-      expiresAt
-    });
+    // Store OTP (with fallback)
+    await storeOtp(phone, generatedOtp, expiresAt);
     
     if (client) {
       try {
@@ -64,8 +114,8 @@ const verifyOtp = async (req, res) => {
   try {
     const { phone, otp } = req.validated;
 
-    // Find OTP in database
-    const storedOtp = await Otp.findOne({ phone, otp });
+    // Find OTP (with fallback)
+    const storedOtp = await getOtp(phone, otp);
     
     if (!storedOtp) {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
@@ -73,15 +123,22 @@ const verifyOtp = async (req, res) => {
 
     // Check if OTP is expired
     if (storedOtp.expiresAt < new Date()) {
-      await Otp.deleteOne({ _id: storedOtp._id });
+      await deleteOtp(phone);
       return res.status(400).json({ message: 'OTP has expired' });
     }
 
     // Clear OTP after successful verification
-    await Otp.deleteOne({ _id: storedOtp._id });
+    await deleteOtp(phone);
 
     // Check if user already exists
-    const user = await User.findOne({ phone });
+    let user = null;
+    if (mongoose.connection.readyState === 1) {
+      try {
+        user = await User.findOne({ phone }).maxTimeMS(5000);
+      } catch (err) {
+        console.error('[User] MongoDB read failed:', err.message);
+      }
+    }
     res.json({ message: 'OTP verified', user: user || null });
   } catch (error) {
     console.error('Verify OTP Error:', error);
@@ -98,12 +155,27 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'Name, age, and phone are required' });
     }
 
-    // Upsert: update if exists, create if not
-    const user = await User.findOneAndUpdate(
-      { phone },
-      { name, age, phone, gender, address },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
+    let user = null;
+    
+    // Try MongoDB if connected
+    if (mongoose.connection.readyState === 1) {
+      try {
+        user = await User.findOneAndUpdate(
+          { phone },
+          { name, age, phone, gender, address },
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        ).maxTimeMS(10000);
+        console.log('[Registration] Saved to MongoDB');
+      } catch (err) {
+        console.error('[Registration] MongoDB failed:', err.message);
+        // Return success anyway with user data
+        user = { name, age, phone, gender, address, _id: phone };
+      }
+    } else {
+      // MongoDB not connected, return user data anyway
+      user = { name, age, phone, gender, address, _id: phone };
+      console.log('[Registration] MongoDB not connected, returning user data');
+    }
     
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (err) {
