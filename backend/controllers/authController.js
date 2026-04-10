@@ -91,18 +91,23 @@ const verifyOtp = async (req, res) => {
 
 // POST /register
 const register = async (req, res) => {
-  const { name, age, phone, gender, address } = req.body;
-  if (!name || !age || !phone) return res.status(400).json({ message: 'All fields required' });
-
   try {
+    const { name, age, phone, gender, address } = req.body;
+    
+    if (!name || !age || !phone) {
+      return res.status(400).json({ message: 'Name, age, and phone are required' });
+    }
+
     // Upsert: update if exists, create if not
     const user = await User.findOneAndUpdate(
       { phone },
       { name, age, phone, gender, address },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
-    res.status(201).json({ message: 'User registered', user });
+    
+    res.status(201).json({ message: 'User registered successfully', user });
   } catch (err) {
+    console.error('Registration Error:', err);
     res.status(500).json({ message: 'Registration failed', error: err.message });
   }
 };

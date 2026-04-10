@@ -47,6 +47,17 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Middleware to check MongoDB connection
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState !== 1 && !req.path.startsWith('/')) {
+    return res.status(503).json({ 
+      message: 'Database connection not ready. Please try again in a moment.',
+      mongoState: mongoose.connection.readyState 
+    });
+  }
+  next();
+});
+
 // Routes
 app.use('/api', authRoutes);
 app.use('/api', surveyRoutes);
@@ -88,12 +99,14 @@ const server = app.listen(PORT, () => {
   process.exit(1);
 });
 
-// Attempt connection but catch it globally to prevent crash
+// Connect to MongoDB with longer timeout
 const connectWithRetry = () => {
   logger.info(`Attempting to connect to MongoDB using ${mongoUri}`);
   mongoose
     .connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s
+      serverSelectionTimeoutMS: 30000, // Increased to 30s
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 30000,
     })
     .then(() => {
       logger.info('MongoDB connected successfully');
