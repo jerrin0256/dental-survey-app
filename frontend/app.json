@@ -2,7 +2,7 @@
   "expo": {
     "name": "Dental Survey App",
     "slug": "dental-survey-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "newArchEnabled": false,
@@ -18,8 +18,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#1A73E8"
-      },
-      "versionCode": 1
+      }
     },
     "plugins": [
       "expo-secure-store",
@@ -28,7 +27,10 @@
     "extra": {
       "eas": {
         "projectId": "b84d57d5-f9ca-4d03-9a6e-ba2647e59e33"
-      }
+      },
+      "apiBaseUrl": "",
+      "apiPort": 5001,
+      "useProductionApiInDev": false
     },
     "owner": "jerryn"
   }

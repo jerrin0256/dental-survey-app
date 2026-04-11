@@ -5,24 +5,39 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { sendOtp } from "../api";
 import Toast from "react-native-toast-message";
+import { normalizePhone, formatApiError } from "../utils/phone";
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSendOtp = async () => {
-    if (!phone) {
-      Toast.show({ type: "error", text1: "Error", text2: "Please enter your mobile number" });
+    const normalized = normalizePhone(phone);
+    if (!normalized) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid number",
+        text2: "Enter 10 digits, or +91 followed by 10 digits.",
+      });
       return;
     }
     setLoading(true);
     try {
-      const res = await sendOtp(phone);
-      const otpHint = res.data?.testOtp ? ` (OTP: ${res.data.testOtp})` : '';
-      Toast.show({ type: "success", text1: "Success", text2: `OTP sent successfully${otpHint}` });
-      navigation.navigate("OTP", { phone });
+      const res = await sendOtp(normalized);
+      const code = res.data?.testOtp;
+      if (code) {
+        Toast.show({
+          type: "success",
+          text1: "OTP ready",
+          text2: `Your code: ${code} (shown when SMS is not configured)`,
+          visibilityTime: 8000,
+        });
+      } else {
+        Toast.show({ type: "success", text1: "OTP sent", text2: "Check your SMS." });
+      }
+      navigation.navigate("OTP", { phone: normalized });
     } catch (err) {
-      Toast.show({ type: "error", text1: "Error", text2: err.response?.data?.message || "Failed to send OTP" });
+      Toast.show({ type: "error", text1: "Could not send OTP", text2: formatApiError(err) });
     } finally {
       setLoading(false);
     }
@@ -82,7 +97,18 @@ export default function LoginScreen({ navigation }) {
             Don’t have an account?{" "}
             <Text
               style={{ color: "#1A73E8", fontWeight: "700" }}
-              onPress={() => navigation.navigate("Register", { phone })}
+              onPress={() => {
+                const n = normalizePhone(phone);
+                if (!n) {
+                  Toast.show({
+                    type: "error",
+                    text1: "Enter your number first",
+                    text2: "Use 10 digits or +91 before requesting OTP.",
+                  });
+                  return;
+                }
+                navigation.navigate("Register", { phone: n });
+              }}
             >
               Register Now
             </Text>

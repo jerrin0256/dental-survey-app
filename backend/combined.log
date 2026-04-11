@@ -109,3 +109,103 @@
 {"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-10T12:25:25.788Z"}
 {"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-10T12:25:25.789Z"}
 {"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-10T12:25:26.417Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T09:55:18.647Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T09:55:18.674Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T09:55:18.675Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T09:55:19.267Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T09:57:18.517Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T09:57:18.543Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T09:57:18.544Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T09:57:19.061Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:01:51.908Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:01:51.929Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:01:51.930Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:01:52.460Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:01:54.935Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:01:54.956Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:01:54.957Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:01:55.431Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:10:08.755Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:10:08.779Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:10:08.781Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:10:09.269Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:17:41.742Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:17:41.769Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:17:41.770Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:17:42.257Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:25:06.739Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:25:06.758Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:25:06.759Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:25:07.247Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:28:03.557Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:28:03.583Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:28:03.584Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:28:04.063Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:28:08.357Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:28:08.382Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:28:08.383Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:28:08.901Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:28:42.389Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:28:42.431Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:28:42.435Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:28:42.983Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:28:47.844Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:28:47.879Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:28:47.880Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:28:48.420Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:31:26.584Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:31:26.606Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:31:26.608Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:31:27.128Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:36:01.089Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:36:01.116Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:36:01.117Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:36:01.630Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:44:23.083Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:44:23.110Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:44:23.111Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:44:23.597Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:47:31.402Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:47:31.428Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:47:31.429Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:47:31.908Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:47:37.435Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:47:37.467Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:47:37.468Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:47:37.977Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:47:39.965Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:47:39.992Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:47:39.993Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:47:40.516Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:47:42.606Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:47:42.628Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:47:42.630Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:47:43.085Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:52:01.812Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:52:01.832Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:52:01.832Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:52:02.308Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T10:59:09.444Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T10:59:09.468Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T10:59:09.469Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T10:59:09.994Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T11:01:35.158Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T11:01:35.201Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T11:01:35.205Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T11:01:35.812Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T11:08:48.580Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T11:08:48.599Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T11:08:48.599Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T11:08:49.074Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T11:15:35.277Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T11:15:35.295Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T11:15:35.296Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T11:15:35.767Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T11:45:45.787Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T11:45:45.809Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T11:45:45.810Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T11:45:46.285Z"}
+{"level":"info","message":"Attempting to connect to MongoDB using mongodb+srv://jerrinkjoy916_db_user:Jerrinkjoy@cluster0.2d7vuin.mongodb.net/dental_survey?retryWrites=true&w=majority&appName=Cluster0","service":"dental-survey-api","timestamp":"2026-04-11T11:51:09.393Z"}
+{"level":"info","message":"Server running on port 5001","service":"dental-survey-api","timestamp":"2026-04-11T11:51:09.411Z"}
+{"level":"info","message":"MongoDB URI source: MONGO_URI environment variable","service":"dental-survey-api","timestamp":"2026-04-11T11:51:09.412Z"}
+{"level":"info","message":"MongoDB connected successfully","service":"dental-survey-api","timestamp":"2026-04-11T11:51:09.890Z"}

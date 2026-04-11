@@ -57,7 +57,7 @@
 //   btnText: { color: "#fff" },
 // });
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -70,75 +70,100 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { verifyOtp, sendOtp } from "../api";
 import Toast from "react-native-toast-message";
+import { formatApiError, normalizePhone } from "../utils/phone";
 
 export default function OTPScreen({ navigation, route }) {
-  const phone = route?.params?.phone || "";
+  const rawPhone = route?.params?.phone;
+  const phone = normalizePhone(rawPhone != null ? String(rawPhone) : "") || "";
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef([]);
+  const verifyLock = useRef(false);
 
-  const handleOtpChange = (value, index) => {
-    // Only allow numbers
-    if (value && !/^[0-9]$/.test(value)) return;
-    
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Auto advance to next input
-    if (value && index < 3) {
-      inputRefs.current[index + 1]?.focus();
+  useEffect(() => {
+    if (!phone) {
+      Toast.show({
+        type: "error",
+        text1: "Missing phone",
+        text2: "Go back and enter your mobile number again.",
+      });
+      navigation.replace("Login");
     }
-    
-    // Auto verify when all 4 digits entered
-    if (index === 3 && value) {
-      const fullOtp = [...newOtp.slice(0, 3), value].join('');
-      if (fullOtp.length === 4) {
-        // Small delay to show the last digit
-        setTimeout(() => handleVerify(), 300);
+  }, [phone, navigation]);
+
+  const runVerify = async (fourDigits) => {
+    const code = String(fourDigits || "").replace(/\D/g, "").slice(0, 4);
+    if (!phone || code.length !== 4) {
+      Toast.show({ type: "error", text1: "Error", text2: "Please enter a valid 4-digit OTP" });
+      return;
+    }
+    if (verifyLock.current) return;
+    verifyLock.current = true;
+    setLoading(true);
+    try {
+      const res = await verifyOtp(phone, code);
+      const user = res.data.user;
+      Toast.show({ type: "success", text1: "Success", text2: "OTP verified successfully!" });
+      if (user) {
+        navigation.replace("UserHome", { user });
+      } else {
+        navigation.replace("Register", { phone });
       }
+    } catch (err) {
+      Toast.show({ type: "error", text1: "Verification failed", text2: formatApiError(err) });
+    } finally {
+      setLoading(false);
+      verifyLock.current = false;
     }
   };
 
+  const handleOtpChange = (value, index) => {
+    if (value && !/^[0-9]$/.test(value)) return;
+
+    setOtp((prev) => {
+      const newOtp = [...prev];
+      newOtp[index] = value;
+
+      if (value && index < 3) {
+        setTimeout(() => inputRefs.current[index + 1]?.focus(), 0);
+      }
+
+      if (index === 3 && value) {
+        const full = newOtp.join("");
+        if (full.length === 4) {
+          setTimeout(() => runVerify(full), 350);
+        }
+      }
+
+      return newOtp;
+    });
+  };
+
   const handleKeyPress = (e, index) => {
-    // Handle backspace
-    if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.nativeEvent.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
-  const handleVerify = async () => {
-    const otpValue = otp.join("");
-    if (otpValue.length < 4) {
-      Toast.show({ type: "error", text1: "Error", text2: "Please enter a valid 4-digit OTP" });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await verifyOtp(phone, otpValue);
-      const user = res.data.user;
-      Toast.show({ type: "success", text1: "Success", text2: "OTP verified successfully!" });
-      
-      if (user) {
-        navigation.replace("UserHome", { user });
-      } else {
-        navigation.replace("Register", { phone }); // Complete profile
-      }
-    } catch (err) {
-      Toast.show({ type: "error", text1: "Error", text2: err.response?.data?.message || "Invalid OTP" });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleVerifyPress = () => runVerify(otp.join(""));
 
   const handleResend = async () => {
+    if (!phone) return;
     try {
       const res = await sendOtp(phone);
-      const otpHint = res.data?.testOtp ? ` (OTP: ${res.data.testOtp})` : '';
-      Toast.show({ type: "success", text1: "Resent", text2: `OTP sent successfully${otpHint}` });
+      const code = res.data?.testOtp;
+      if (code) {
+        Toast.show({
+          type: "success",
+          text1: "OTP resent",
+          text2: `Your code: ${code}`,
+          visibilityTime: 8000,
+        });
+      } else {
+        Toast.show({ type: "success", text1: "OTP sent", text2: "Check your SMS." });
+      }
     } catch (err) {
-      Toast.show({ type: "error", text1: "Error", text2: err.response?.data?.message || "Failed to resend OTP" });
+      Toast.show({ type: "error", text1: "Resend failed", text2: formatApiError(err) });
     }
   };
 
@@ -153,7 +178,7 @@ export default function OTPScreen({ navigation, route }) {
 
       <View style={styles.content}>
         <View style={styles.form}>
-          <Text style={styles.title}>OTP Verification [UPDATED]</Text>
+          <Text style={styles.title}>OTP Verification</Text>
 
           <Text style={styles.sub}>
             Enter the verification code we just sent on your phone number
@@ -177,7 +202,7 @@ export default function OTPScreen({ navigation, route }) {
           </View>
 
           {/* ✅ VERIFY BUTTON (IMPORTANT) */}
-          <TouchableOpacity style={styles.btn} onPress={handleVerify} disabled={loading}>
+          <TouchableOpacity style={styles.btn} onPress={handleVerifyPress} disabled={loading}>
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (

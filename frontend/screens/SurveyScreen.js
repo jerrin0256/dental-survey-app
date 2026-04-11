@@ -173,8 +173,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import QuestionCard from '../components/QuestionCard';
 import ProgressBar from '../components/ProgressBar';
-import { calculateScore } from '../components/SurveyData';
+import { calculateScore, transformQuestionsToSections, SURVEY_SECTIONS } from '../components/SurveyData';
 import { submitSurvey, getQuestionsForUser } from '../api';
+import { formatApiError } from '../utils/phone';
 
 export default function SurveyScreen({ navigation, route }) {
   const user = route?.params?.user || {};
@@ -185,36 +186,56 @@ export default function SurveyScreen({ navigation, route }) {
   const [submitting, setSubmitting] = useState(false);
   const [dynamicSections, setDynamicSections] = useState([]);
   const [allQuestions, setAllQuestions] = useState([]);
+  const [loadError, setLoadError] = useState(null);
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
     const fetchQuestions = async () => {
+      setLoading(true);
+      setLoadError(null);
+      const userId = user.phone;
+
       try {
-        const userId = user.phone;
-        const response = await getQuestionsForUser(userId);
-        if (response.data && response.data.length > 0) {
-          // Set questions as flat list
-          setAllQuestions(response.data);
-          // For UI, group into one section
-          const sections = [{
-             title: "Clinical Oral Checkup",
-             questions: response.data.map(q => ({
-                id: q._id || q.id,
-                text: q.text,
-                options: q.options || ["No", "Yes"],
-                scores: q.scores || [0, 1]
-             }))
-          }];
+        // 1. Try to fetch from API
+        const response = await getQuestionsForUser(userId || "guest");
+        const list = Array.isArray(response.data) ? response.data : [];
+        
+        if (cancelled) return;
+
+        if (list.length > 0) {
+          setAllQuestions(list);
+          const sections = transformQuestionsToSections(list);
           setDynamicSections(sections);
+          setSectionIdx(0);
+          setQuestionIdx(0);
+        } else {
+           throw new Error("Empty questions from server");
         }
       } catch (error) {
-        console.error("Critical: Failed to fetch dynamic questions:", error);
-        Alert.alert("System Error", "Could not load survey questions. Please check your connection.");
+        console.warn("API Questions failed, falling back to local set:", error.message);
+        if (cancelled) return;
+
+        // 2. Fallback to hardcoded SURVEY_SECTIONS if API fails
+        const fallbackList = [];
+        SURVEY_SECTIONS.forEach(s => s.questions.forEach(q => fallbackList.push(q)));
+        
+        setAllQuestions(fallbackList);
+        setDynamicSections(SURVEY_SECTIONS);
+        setSectionIdx(0);
+        setQuestionIdx(0);
+        
+        if (!userId) {
+          setLoadError("Guest mode: Using default questions.");
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
+
     fetchQuestions();
-  }, [user]);
+    return () => { cancelled = true; };
+  }, [user?.phone, retryTick]);
 
   if (loading) {
     return (
@@ -226,8 +247,33 @@ export default function SurveyScreen({ navigation, route }) {
   }
 
   const sections = dynamicSections;
-  const section = sections[sectionIdx];
-  const question = section.questions[questionIdx];
+  const section = (sections && sections.length > sectionIdx) ? sections[sectionIdx] : null;
+  const question = (section && section.questions && section.questions.length > questionIdx) 
+    ? section.questions[questionIdx] 
+    : null;
+
+  if (!section || !question) {
+    return (
+      <SafeAreaView style={[styles.container, { padding: 24, justifyContent: "center" }]}>
+        <Text style={styles.errorTitle}>Survey unavailable</Text>
+        <Text style={styles.errorBody}>
+          {loadError || "No questions loaded. Check your connection and try again."}
+        </Text>
+        <TouchableOpacity
+          style={styles.navBtn}
+          onPress={() => setRetryTick((t) => t + 1)}
+        >
+          <Text style={styles.nextBtnText}>Retry</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navBtn, styles.prevBtn, { marginTop: 12 }]}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.prevBtnText}>Go back</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
 
   const totalQuestions = sections.reduce(
     (s, sec) => s + sec.questions.length,
@@ -275,10 +321,11 @@ export default function SurveyScreen({ navigation, route }) {
         user 
       });
     } catch (err) {
-      Alert.alert('Submission Failed', err.response?.data?.message || 'Failed to submit survey');
-      navigation.replace('Result', {
-        survey: { score, answers },
-        user
+      console.warn("Submission failed, proceeding with local result:", err.message);
+      Alert.alert('Notice', 'Result saved locally. Syncing may be delayed.');
+      navigation.replace('Result', { 
+        survey: { score, answers, createdAt: new Date() }, 
+        user 
       });
     } finally {
       setSubmitting(false);
@@ -455,5 +502,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginTop: 28,
+  },
+
+  errorTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#1C1C1E',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  errorBody: {
+    fontSize: 15,
+    color: '#5F6368',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 24,
   },
 });

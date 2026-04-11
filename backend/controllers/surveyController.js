@@ -20,14 +20,30 @@ const getQuestionsForUser = async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     let survey = await Survey.findOne({ user: user._id });
-    if (!survey) {
-      // Get all questions
+    if (!survey || !survey.questions || survey.questions.length === 0) {
+      // Get questions to assign
       const allQuestions = await Question.find();
+      if (allQuestions.length === 0) {
+        return res.json([]); // Truly no questions in DB
+      }
+      
       // Shuffle and pick 10
-      const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+      const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 10);
-      // Create survey with questions
-      survey = await Survey.create({ user: user._id, questions: selected.map(q => q._id), answers: {}, score: 0 });
+      
+      if (!survey) {
+        // Create new
+        survey = await Survey.create({ 
+          user: user._id, 
+          questions: selected.map(q => q._id), 
+          answers: {}, 
+          score: 0 
+        });
+      } else {
+        // Update existing with new questions
+        survey.questions = selected.map(q => q._id);
+        await survey.save();
+      }
     }
     // Populate questions
     await survey.populate('questions');

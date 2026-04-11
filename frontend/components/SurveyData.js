@@ -156,9 +156,10 @@ export function transformQuestionsToSections(questions) {
   return Object.values(groups);
 }
 
-// Result determination
+/** Aligned with backend `surveyController.getStatus` (≤5 Good, ≤10 Satisfactory, else Poor). */
 export function getResult(score) {
-  if (score <= 6) return { status: 'Good', color: '#34A853', recommendation: 'Great oral health!' };
-  if (score <= 13) return { status: 'Satisfactory', color: '#FBBC04', recommendation: 'Good, but could improve.' };
+  const n = Number(score) || 0;
+  if (n <= 5) return { status: 'Good', color: '#34A853', recommendation: 'Great oral health!' };
+  if (n <= 10) return { status: 'Satisfactory', color: '#FBBC04', recommendation: 'Good, but could improve.' };
   return { status: 'Poor', color: '#EA4335', recommendation: 'Please visit a dentist soon.' };
 }

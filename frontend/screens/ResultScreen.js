@@ -4,14 +4,47 @@ import { Ionicons } from '@expo/vector-icons';
 import { getResult } from '../components/SurveyData';
 
 export default function ResultScreen({ navigation, route }) {
-  const { survey, user } = route.params;
-  const { score } = survey;
-  const { status, color, recommendation } = getResult(score);
+  const params = route?.params || {};
+  const survey = params.survey || {};
+  const user = params.user || { name: 'User', phone: '' };
+
+  const score = survey.score !== undefined && survey.score !== null ? Number(survey.score) : 0;
+  const apiStatus = typeof survey.status === 'string' ? survey.status : null;
+  const computed = getResult(score);
+  const status = apiStatus || computed.status;
+  const color =
+    status === 'Good' ? '#34A853' : status === 'Satisfactory' ? '#FBBC04' : '#EA4335';
+  const recommendation =
+    status === 'Good'
+      ? 'Great oral health!'
+      : status === 'Satisfactory'
+        ? 'Good, but could improve.'
+        : 'Please visit a dentist soon.';
+
+  if (params.survey == null || typeof params.survey !== 'object') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.replace('Login')}>
+            <Ionicons name="arrow-back" size={24} color="#1C1C1E" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Results</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <View style={{ padding: 24 }}>
+          <Text style={styles.heading}>Nothing to show</Text>
+          <TouchableOpacity style={styles.retakeBtn} onPress={() => navigation.replace('Login')}>
+            <Text style={styles.retakeBtnText}>Go to Login</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backBtn}
           onPress={() => navigation.navigate('UserHome', { user })}
         >
@@ -23,18 +56,15 @@ export default function ResultScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <Text style={styles.heading}>Survey Complete! 🎉</Text>
 
-        {/* Score circle */}
         <View style={[styles.scoreCircle, { borderColor: color }]}>
           <Text style={[styles.scoreNumber, { color }]}>{score}</Text>
           <Text style={styles.scoreLabel}>Your Score</Text>
         </View>
 
-        {/* Status badge */}
         <View style={[styles.badge, { backgroundColor: color }]}>
           <Text style={styles.badgeText}>{status}</Text>
         </View>
 
-        {/* Score legend */}
         <View style={styles.legendCard}>
           <Text style={styles.legendTitle}>Score Guide</Text>
           {[
@@ -50,13 +80,11 @@ export default function ResultScreen({ navigation, route }) {
           ))}
         </View>
 
-        {/* Recommendation */}
         <View style={styles.recCard}>
           <Text style={styles.recTitle}>💡 Recommendation</Text>
           <Text style={styles.recText}>{recommendation}</Text>
         </View>
 
-        {/* Actions */}
         <TouchableOpacity
           style={styles.retakeBtn}
           onPress={() => navigation.replace('Survey', { user })}
@@ -87,17 +115,17 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB'
+    borderBottomColor: '#E5E7EB',
   },
   backBtn: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: '#F5F7FF'
+    backgroundColor: '#F5F7FF',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1C1C1E'
+    color: '#1C1C1E',
   },
 
   scroll: {

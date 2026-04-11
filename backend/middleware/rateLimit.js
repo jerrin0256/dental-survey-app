@@ -2,8 +2,16 @@ const rateLimit = require('express-rate-limit');
 
 const otpLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 requests per window
+  max: 30,
   message: 'Too many OTP requests, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const verifyOtpLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 40,
+  message: 'Too many verification attempts, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -16,4 +24,4 @@ const adminLoginLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-module.exports = { otpLimiter, adminLoginLimiter };
+module.exports = { otpLimiter, verifyOtpLimiter, adminLoginLimiter };

@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Question = require('./models/Question');
 
-dotenv.config();
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const questions = [
   // Original / Screenshot Questions
@@ -112,7 +113,9 @@ const questions = [
 
 const seed = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(
+      process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/dental-survey-app'
+    );
     console.log('Connected to MongoDB');
 
     // Clear and re-seed

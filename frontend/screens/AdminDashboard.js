@@ -33,19 +33,37 @@ export default function AdminDashboard({ navigation }) {
       const response = await getAllSurveys();
       const qResponse = await getQuestions();
       
-      const currentQuestions = qResponse.data || [];
-      const currentSurveys = response.data || [];
+      const currentQuestions = Array.isArray(qResponse.data) ? qResponse.data : [];
+      const currentSurveys = Array.isArray(response.data) ? response.data : [];
       
       // DYNAMIC: Calculate total possible score from real questions
-      const maxPossible = currentQuestions.length > 0 
-        ? currentQuestions.reduce((acc, q) => acc + (q.weight || 1), 0)
-        : 30; // fallback if empty
+      // Since each student gets 10 random questions, the "Max Score" for stats 
+      // is usually the average max score of 10 random questions.
+      // However, for the dashboard percentage, we'll use the average max score possible 
+      // or a fixed reference of 30 which is standard for 10 questions.
+      const maxPossible = currentQuestions.length > 0
+        ? Math.round(
+            (currentQuestions.reduce((acc, q) => {
+              const scores = Array.isArray(q.scores) && q.scores.length > 0 ? q.scores : [1];
+              return acc + Math.max(...scores);
+            }, 0) /
+              currentQuestions.length) *
+              10
+          )
+        : 30;
 
       setSurveys(currentSurveys);
       setFilteredSurveys(currentSurveys);
       setMaxScore(maxPossible);
     } catch (error) {
       console.error("Error fetching dynamic data:", error);
+      const msg =
+        error.response?.data?.message ||
+        (error.code === "ECONNABORTED" ? "Request timed out. Is the API running?" : null) ||
+        (error.request && !error.response ? "Cannot reach API. Check URL and network." : null) ||
+        error.message ||
+        "Failed to load data";
+      Toast.show({ type: "error", text1: "Could not load dashboard", text2: String(msg).slice(0, 200) });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -59,10 +77,12 @@ export default function AdminDashboard({ navigation }) {
   }, [isFocused]);
 
   useEffect(() => {
-    const filtered = surveys.filter(s => 
-      s.user?.name.toLowerCase().includes(search.toLowerCase()) || 
-      s.user?.phone.includes(search)
-    );
+    const q = search.trim().toLowerCase();
+    const filtered = surveys.filter((s) => {
+      const name = String(s.user?.name ?? "").toLowerCase();
+      const phone = String(s.user?.phone ?? "");
+      return name.includes(q) || phone.includes(search.trim());
+    });
     setFilteredSurveys(filtered);
   }, [search, surveys]);
 

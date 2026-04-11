@@ -61,11 +61,13 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import { registerUser } from "../api";
+import { normalizePhone, formatApiError } from "../utils/phone";
 
 export default function RegisterScreen({ navigation, route }) {
   const phone = route?.params?.phone || "";
@@ -78,20 +80,31 @@ export default function RegisterScreen({ navigation, route }) {
 
   const handleNext = async () => {
     if (!name || !age || !gender || !address) {
-      Toast.show({ type: "error", text1: "Error", text2: "Please fill all fields" });
+      Toast.show({ type: "error", text1: "Error", text2: "Please fill all fields, including gender." });
       return;
     }
 
+    const normalizedPhone = normalizePhone(phone);
+    if (!normalizedPhone) {
+      Toast.show({ type: "error", text1: "Error", text2: "Invalid phone number on this account." });
+      return;
+    }
     setLoading(true);
     try {
-      const res = await registerUser({ name, age, phone, gender, address });
+      const res = await registerUser({
+        name,
+        age,
+        phone: normalizedPhone,
+        gender,
+        address,
+      });
       Toast.show({ type: "success", text1: "Success", text2: "Registration Completed!" });
       const backendUser = res.data?.user || {};
       navigation.replace("Survey", {
-        user: { ...backendUser, phone, name, age, gender, address },
+        user: { ...backendUser, phone: normalizedPhone, name, age, gender, address },
       });
     } catch (err) {
-      Toast.show({ type: "error", text1: "Error", text2: err.response?.data?.message || "Registration failed" });
+      Toast.show({ type: "error", text1: "Error", text2: formatApiError(err) });
     } finally {
       setLoading(false);
     }
@@ -132,15 +145,21 @@ export default function RegisterScreen({ navigation, route }) {
             placeholderTextColor="#9ca3af"
           />
 
-          {/* GENDER */}
+          {/* GENDER — must match backend Joi: Male | Female | Other */}
           <Text style={styles.label}>Gender</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Male / Female"
-            value={gender}
-            onChangeText={setGender}
-            placeholderTextColor="#9ca3af"
-          />
+          <View style={styles.pickerWrap}>
+            <Picker
+              selectedValue={gender}
+              onValueChange={(v) => setGender(v)}
+              style={styles.picker}
+              itemStyle={{ fontSize: 16 }}
+            >
+              <Picker.Item label="Select gender" value="" />
+              <Picker.Item label="Male" value="Male" />
+              <Picker.Item label="Female" value="Female" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
 
           {/* PHONE */}
           <Text style={styles.label}>Phone (Verified)</Text>
@@ -233,6 +252,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F3F4",
     borderColor: "#E8EAED",
     color: "#80868B",
+  },
+
+  pickerWrap: {
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 10,
+    backgroundColor: "#F8F9FA",
+    overflow: "hidden",
+  },
+  picker: {
+    width: "100%",
   },
 
   btn: {

@@ -26,6 +26,11 @@ export default function UserHomeScreen({ navigation, route }) {
       let isActive = true;
       const fetchResult = async () => {
         setLoading(true);
+        if (!userId) {
+          setHasSurvey(false);
+          setLoading(false);
+          return;
+        }
         try {
           const res = await getSurveyResult(userId);
           if (isActive && res.data && res.data.survey) {
@@ -61,8 +66,8 @@ export default function UserHomeScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.welcome}>Hi, {user.name}!</Text>
-            <Text style={styles.id}>Patient ID: {user.id}</Text>
+             <Text style={styles.welcome}>Hi, {user.name}!</Text>
+             <Text style={styles.id}>Patient ID: {user.phone || user.id || user._id}</Text>
           </View>
           <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
             <Ionicons name="log-out-outline" size={20} color="#1A73E8" style={{ marginRight: 8 }} />
