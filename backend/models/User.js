@@ -11,7 +11,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Add index for faster queries
-userSchema.index({ phone: 1 });
-
 module.exports = mongoose.model('User', userSchema);
